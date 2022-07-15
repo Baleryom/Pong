@@ -20,6 +20,17 @@ namespace Pong
             InitializeComponent();
         }
 
+        // Enables double buffering for all the controls ( fixes screen flickering drawString )
+        protected override CreateParams CreateParams
+        {
+            get
+            {
+                CreateParams handleparam = base.CreateParams;
+                handleparam.ExStyle |= 0x02000000;
+                return handleparam;
+            }
+        }
+
         private void BallDirectionX(int X, int Y)
         {
             ball = new Rectangle(ball.X + X, ball.Y + Y, 15, 15);
