@@ -4,9 +4,10 @@ namespace Pong
 {
     public partial class PongForm : Form
     {
+        const int paddleSizeX = 150;
         Rectangle background = new Rectangle(0, 0, 1000, 1000);
-        Rectangle paddle1 = new Rectangle(10, 200, 10, 70);
-        Rectangle paddle2 = new Rectangle(790, 200, 10, 70);
+        Rectangle paddle1 = new Rectangle(10, 200, 10, paddleSizeX);
+        Rectangle paddle2 = new Rectangle(790, 200, 10, paddleSizeX);
         Rectangle ball = new Rectangle(400, 200, 15, 15);
         PlayerInput player2 = new PlayerInput((int)Keys.Up, (int)Keys.Down);
         PlayerInput player1 = new PlayerInput((int)Keys.W, (int)Keys.S);
@@ -49,7 +50,7 @@ namespace Pong
         private void HandlePhysics()
         {
             // if ball hits paddle 1
-            if (ball.X == paddle1.X && ball.Y <= paddle1.Y + 70)
+            if (ball.X == paddle1.X && ball.Y <= paddle1.Y + paddleSizeX)
             {
                 ballSpeedX = 15;
                 if (ball.Y > paddle1.Y + 35)
@@ -66,12 +67,12 @@ namespace Pong
                 }
             }
             // if ball hits paddle 2
-            if (ball.X == paddle2.X && ball.Y <= paddle2.Y + 70)
+            if (ball.X == paddle2.X && ball.Y <= paddle2.Y + paddleSizeX)
             {
                 ballSpeedX = -15;
-                if (ball.Y > paddle2.Y + 35)
+                if (ball.Y > paddle2.Y + paddleSizeX/2)
                     ballSpeedY = +15;
-                else if (ball.Y < paddle2.Y + 35)
+                else if (ball.Y < paddle2.Y + paddleSizeX/2)
                     ballSpeedY = -15;
                 else
                     ballSpeedY = 0;
@@ -85,15 +86,22 @@ namespace Pong
             // if player 1 scores
             if (ball.X > 800)
             {
-                ball = new Rectangle(400, 200, 15, 15);
                 score1++;
+                ResetGame();
             }
             // if player 2 scores
             if (ball.X < 2)
-            {
-                ball = new Rectangle(400, 200, 15, 15);
+            {                
                 score2++;
+                ResetGame();
             }
+        }
+
+        private void ResetGame()
+        {
+            ball = new Rectangle(400, 200, 15, 15);
+            paddle1 = new Rectangle(10, 200, 10, paddleSizeX);
+            paddle2 = new Rectangle(790, 200, 10, paddleSizeX);
         }
 
         protected override void OnPaint(PaintEventArgs e)
