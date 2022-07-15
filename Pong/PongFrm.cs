@@ -2,12 +2,12 @@ using System.Diagnostics;
 
 namespace Pong
 {
-    public partial class PongForm : Form
+    public partial class PongFrm : MenuFrm
     {
-        const int paddleSizeX = 150;
+        const int PADDLESIZE_X = 150;
         Rectangle background = new Rectangle(0, 0, 1000, 1000);
-        Rectangle paddle1 = new Rectangle(10, 200, 10, paddleSizeX);
-        Rectangle paddle2 = new Rectangle(790, 200, 10, paddleSizeX);
+        Rectangle paddle1 = new Rectangle(10, 200, 10, PADDLESIZE_X);
+        Rectangle paddle2 = new Rectangle(790, 200, 10, PADDLESIZE_X);
         Rectangle ball = new Rectangle(400, 200, 15, 15);
         PlayerInput player2 = new PlayerInput((int)Keys.Up, (int)Keys.Down);
         PlayerInput player1 = new PlayerInput((int)Keys.W, (int)Keys.S);
@@ -16,25 +16,9 @@ namespace Pong
         int ballSpeedX = 15;
         int ballSpeedY = 0;
 
-        public PongForm()
+        public PongFrm()
         {
             InitializeComponent();
-        }
-
-        // Enables double buffering for all the controls ( fixes screen flickering drawString )
-        protected override CreateParams CreateParams
-        {
-            get
-            {
-                CreateParams handleparam = base.CreateParams;
-                handleparam.ExStyle |= 0x02000000;
-                return handleparam;
-            }
-        }
-
-        private void BallDirectionX(int X, int Y)
-        {
-            ball = new Rectangle(ball.X + X, ball.Y + Y, 15, 15);
         }
 
         public void GameLoop(object state)
@@ -42,66 +26,15 @@ namespace Pong
             Debug.Write($"Running {ball.X},{ball.Y}\n ");
             //Checks if ball collides with paddles and calculates ball direction
             HandlePhysics();
-
             //Sync call
             Invalidate();
-        }
-
-        private void HandlePhysics()
-        {
-            // if ball hits paddle 1
-            if (ball.X == paddle1.X && ball.Y <= paddle1.Y + paddleSizeX)
-            {
-                ballSpeedX = 15;
-                if (ball.Y > paddle1.Y + 35)
-                {
-                    ballSpeedY += 15;
-                }
-                else if (ball.Y < paddle1.Y + 35)
-                {
-                    ballSpeedY -= 15;
-                }
-                else
-                {
-                    ballSpeedY = 0;
-                }
-            }
-            // if ball hits paddle 2
-            if (ball.X == paddle2.X && ball.Y <= paddle2.Y + paddleSizeX)
-            {
-                ballSpeedX = -15;
-                if (ball.Y > paddle2.Y + paddleSizeX/2)
-                    ballSpeedY = +15;
-                else if (ball.Y < paddle2.Y + paddleSizeX/2)
-                    ballSpeedY = -15;
-                else
-                    ballSpeedY = 0;
-            }
-            // if ball hits upper wall
-            if (ball.Y <= 0)
-                ballSpeedY = 30;
-            // if ball hits lower wall
-            if (ball.Y >= 440)
-                ballSpeedY = -30;
-            // if player 1 scores
-            if (ball.X > 800)
-            {
-                score1++;
-                ResetGame();
-            }
-            // if player 2 scores
-            if (ball.X < 2)
-            {                
-                score2++;
-                ResetGame();
-            }
         }
 
         private void ResetGame()
         {
             ball = new Rectangle(400, 200, 15, 15);
-            paddle1 = new Rectangle(10, 200, 10, paddleSizeX);
-            paddle2 = new Rectangle(790, 200, 10, paddleSizeX);
+            paddle1 = new Rectangle(10, 200, 10, PADDLESIZE_X);
+            paddle2 = new Rectangle(790, 200, 10, PADDLESIZE_X);
         }
 
         protected override void OnPaint(PaintEventArgs e)
@@ -146,14 +79,53 @@ namespace Pong
             }
         }
 
-        private static SolidBrush GetBrushColor(Color color)
+        private void BallDirectionX(int X, int Y)
         {
-            return new SolidBrush(color);
+            ball = new Rectangle(ball.X + X, ball.Y + Y, 15, 15);
         }
 
-        private static void Draw(Graphics g, Rectangle rect, Brush brush)
+        private void HandlePhysics()
         {
-            g.FillRectangle(brush, rect);
+            // if ball hits paddle 1
+            if (ball.X == paddle1.X && ball.Y <= paddle1.Y + PADDLESIZE_X)
+            {
+                ballSpeedX = 15;
+                if (ball.Y > paddle1.Y + 35)
+                    ballSpeedY += 15;
+                else if (ball.Y < paddle1.Y + 35)
+                    ballSpeedY -= 15;
+                else
+                    ballSpeedY = 0;
+            }
+            // if ball hits paddle 2
+            if (ball.X == paddle2.X && ball.Y <= paddle2.Y + PADDLESIZE_X)
+            {
+                ballSpeedX = -15;
+                if (ball.Y > paddle2.Y + PADDLESIZE_X / 2)
+                    ballSpeedY = +15;
+                else if (ball.Y < paddle2.Y + PADDLESIZE_X / 2)
+                    ballSpeedY = -15;
+                else
+                    ballSpeedY = 0;
+            }
+            // if ball hits upper wall
+            if (ball.Y <= 0)
+                ballSpeedY = 30;
+            // if ball hits lower wall
+            if (ball.Y >= 440)
+                ballSpeedY = -30;
+            // if player 1 scores
+            if (ball.X > 800)
+            {
+                score1++;
+                ResetGame();
+            }
+            // if player 2 scores
+            if (ball.X < 2)
+            {
+                score2++;
+                ResetGame();
+            }
         }
 
         public struct PlayerInput

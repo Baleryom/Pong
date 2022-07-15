@@ -1,6 +1,6 @@
 ﻿namespace Pong
 {
-    partial class PongForm
+    partial class PongFrm
     {
         /// <summary>
         ///  Required designer variable.
@@ -33,6 +33,7 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(800, 450);
             this.Text = "Pong";
+            CenterToScreen();
 
             // Every quarter of a second, run the function GameLoop
             _timer = new System.Threading.Timer(GameLoop, null,
