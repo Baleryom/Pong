@@ -6,6 +6,7 @@
         ///  Required designer variable.
         /// </summary>
         private System.ComponentModel.IContainer components = null;
+        private System.Threading.Timer _timer;
 
         /// <summary>
         ///  Clean up any resources being used.
@@ -32,6 +33,11 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(800, 450);
             this.Text = "Pong";
+
+            // Every quarter of a second, run the function GameLoop
+            _timer = new System.Threading.Timer(GameLoop, null,
+              TimeSpan.FromSeconds(0.25),
+              TimeSpan.FromSeconds(0.25));
         }
 
         #endregion
