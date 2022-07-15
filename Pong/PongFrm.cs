@@ -2,13 +2,25 @@ using System.Diagnostics;
 
 namespace Pong
 {
+    public struct PlayerInput
+    {
+        public PlayerInput(int Up, int Down)
+        {
+            InputUp = Up;
+            InputDown = Down;
+        }
+
+        public int InputUp { get; }
+        public int InputDown { get; }
+    }
+
     public partial class PongFrm : MenuFrm
     {
         const int PADDLESIZE_X = 150;
-        Rectangle background = new Rectangle(0, 0, 1000, 1000);
-        Rectangle paddle1 = new Rectangle(10, 200, 10, PADDLESIZE_X);
-        Rectangle paddle2 = new Rectangle(790, 200, 10, PADDLESIZE_X);
-        Rectangle ball = new Rectangle(400, 200, 15, 15);
+        DrawableObject background = new DrawableObject(0, 0, 1000, 1000);
+        Paddle paddle1 = new Paddle(10, 200, 10, PADDLESIZE_X);
+        Paddle paddle2 = new Paddle(790, 200, 10, PADDLESIZE_X);
+        Ball ball = new Ball(400, 200, 15, 15);
         PlayerInput player2 = new PlayerInput((int)Keys.Up, (int)Keys.Down);
         PlayerInput player1 = new PlayerInput((int)Keys.W, (int)Keys.S);
         int score1 = 0;
@@ -32,19 +44,19 @@ namespace Pong
 
         private void ResetGame()
         {
-            ball = new Rectangle(400, 200, 15, 15);
-            paddle1 = new Rectangle(10, 200, 10, PADDLESIZE_X);
-            paddle2 = new Rectangle(790, 200, 10, PADDLESIZE_X);
+            ball = new Ball(400, 200, 15, 15);
+            paddle1 = new Paddle(10, 200, 10, PADDLESIZE_X);
+            paddle2 = new Paddle(790, 200, 10, PADDLESIZE_X);
         }
 
         protected override void OnPaint(PaintEventArgs e)
         {
             Graphics g = e.Graphics;
-            Draw(g, background, GetBrushColor(Color.Black));
-            Draw(g, paddle1, GetBrushColor(Color.Blue));
-            Draw(g, paddle2, GetBrushColor(Color.Pink));
+            Draw(g, background.Rect, GetBrushColor(Color.Black));
+            Draw(g, paddle1.Rect, GetBrushColor(Color.Blue));
+            Draw(g, paddle2.Rect, GetBrushColor(Color.Pink));
             BallDirectionX(ballSpeedX, ballSpeedY);
-            Draw(g, ball, GetBrushColor(Color.White));
+            Draw(g, ball.Rect, GetBrushColor(Color.White));
             g.DrawString(score1.ToString() + ":" + score2.ToString(), new Font("Times New Roman", 25.0f), GetBrushColor(Color.Gray), new PointF(350f, 30f));
         }
 
@@ -55,14 +67,14 @@ namespace Pong
             base.OnKeyDown(e);
         }
 
-        private void HandleInput(KeyEventArgs e, ref Rectangle paddle, PlayerInput input)
+        private void HandleInput(KeyEventArgs e, ref Paddle paddle, PlayerInput input)
         {
             if (e.KeyValue == input.InputDown)
             {
                 if (paddle.Y < 410)
                 {
                     Debug.Write($"Key Down\n {paddle.X},{paddle.Y}");
-                    paddle = new Rectangle(paddle.X, paddle.Y + 30, paddle.Width, paddle.Height);
+                    paddle = new Paddle(paddle.X, paddle.Y + 30, paddle.Width, paddle.Height);
                     // Async call
                     Refresh();
                 }
@@ -72,7 +84,7 @@ namespace Pong
                 if (paddle.Y > 5)
                 {
                     Debug.Write($"Key Down\n {paddle.X},{paddle.Y}");
-                    paddle = new Rectangle(paddle.X, paddle.Y - 30, paddle.Width, paddle.Height);
+                    paddle = new Paddle(paddle.X, paddle.Y - 30, paddle.Width, paddle.Height);
                     // Async call
                     Refresh();
                 }
@@ -81,7 +93,7 @@ namespace Pong
 
         private void BallDirectionX(int X, int Y)
         {
-            ball = new Rectangle(ball.X + X, ball.Y + Y, 15, 15);
+            ball = new Ball(ball.X + X, ball.Y + Y, 15, 15);
         }
 
         private void HandlePhysics()
@@ -126,18 +138,6 @@ namespace Pong
                 score2++;
                 ResetGame();
             }
-        }
-
-        public struct PlayerInput
-        {
-            public PlayerInput(int Up, int Down)
-            {
-                InputUp = Up;
-                InputDown = Down;
-            }
-
-            public int InputUp { get; }
-            public int InputDown { get; }
         }
     }
 }

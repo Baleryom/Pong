@@ -2,7 +2,7 @@
 {
     public partial class MenuFrm : Form
     {
-        Rectangle background = new Rectangle(0, 0, 1000, 1000);
+        DrawableObject background = new DrawableObject(0, 0, 1000, 1000);
         private Color onePlayerColor = Color.LightGray;
         private Color twoPlayerColor = Color.Gray;
 
@@ -25,7 +25,7 @@
         protected override void OnPaint(PaintEventArgs e)
         {
             Graphics g = e.Graphics;
-            Draw(g, background, GetBrushColor(Color.Black));
+            Draw(g, background.Rect, GetBrushColor(Color.Black));
             g.DrawString("Pong", new Font("Times New Roman", 25.0f), GetBrushColor(Color.Gray), new PointF(350f, 50f));
             g.DrawString("  1P  ", new Font("Times New Roman", 25.0f), GetBrushColor(onePlayerColor), new PointF(350f, 100f));
             g.DrawString("  2P  ", new Font("Times New Roman", 25.0f), GetBrushColor(twoPlayerColor), new PointF(350f, 150f));
@@ -33,23 +33,23 @@
 
         protected override void OnKeyDown(KeyEventArgs e)
         {
-            if(e.KeyValue == (int)Keys.Down || e.KeyValue == (int)Keys.S)
+            if (e.KeyValue == (int)Keys.Down || e.KeyValue == (int)Keys.S)
             {
                 SwapColors(ref onePlayerColor, ref twoPlayerColor);
                 Refresh();
             }
-            if(e.KeyValue == (int)Keys.Up || e.KeyValue == (int)Keys.W)
+            if (e.KeyValue == (int)Keys.Up || e.KeyValue == (int)Keys.W)
             {
                 SwapColors(ref onePlayerColor, ref twoPlayerColor);
                 Refresh();
             }
-            if(e.KeyValue == (int)Keys.Enter)
+            if (e.KeyValue == (int)Keys.Enter)
             {
                 if (twoPlayerColor == Color.LightGray)
                 {
                     this.Hide();
                     new PongFrm().Show();
-                }                    
+                }
             }
             base.OnKeyDown(e);
         }
