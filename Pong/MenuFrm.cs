@@ -9,18 +9,7 @@
         public MenuFrm()
         {
             InitializeComponent();
-        }
-
-        // Enables double buffering for all the controls ( fixes screen flickering drawString )
-        protected override CreateParams CreateParams
-        {
-            get
-            {
-                CreateParams handleparam = base.CreateParams;
-                handleparam.ExStyle |= 0x02000000;
-                return handleparam;
-            }
-        }
+        }       
 
         protected override void OnPaint(PaintEventArgs e)
         {
