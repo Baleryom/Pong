@@ -135,10 +135,10 @@ namespace Pong
             }
             // if ball hits upper wall
             if (ball.Y <= 0)
-                ballSpeedY = BALLSPEED;
+                ballSpeedY = BALLSPEED * 2;
             // if ball hits lower wall
             if (ball.Y >= 440)
-                ballSpeedY = -BALLSPEED;
+                ballSpeedY = -BALLSPEED * 2;
         }
     }
 }
