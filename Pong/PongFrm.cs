@@ -16,17 +16,17 @@ namespace Pong
 
     public partial class PongFrm : MenuFrm
     {
-        const int PADDLESIZE_X = 100;
-        const int BALL_SPEED = 2;
+        const int PADDLESIZE = 100;
+        const int BALLSPEED = 2;
         DrawableObject background = new DrawableObject(0, 0, 1000, 1000);
-        Paddle paddle1 = new Paddle(30, 200, 10, PADDLESIZE_X);
-        Paddle paddle2 = new Paddle(770, 200, 10, PADDLESIZE_X);
+        Paddle paddle1 = new Paddle(30, 200, 10, PADDLESIZE);
+        Paddle paddle2 = new Paddle(770, 200, 10, PADDLESIZE);
         Ball ball = new Ball(400, 200, 15, 15);
         PlayerInput player2 = new PlayerInput((int)Keys.Up, (int)Keys.Down);
         PlayerInput player1 = new PlayerInput((int)Keys.W, (int)Keys.S);
         int score1 = 0;
         int score2 = 0;
-        int ballSpeedX = BALL_SPEED;
+        int ballSpeedX = BALLSPEED;
         int ballSpeedY = 0;
 
         public PongFrm()
@@ -46,8 +46,8 @@ namespace Pong
         private void ResetGame()
         {
             ball = new Ball(400, 200, 15, 15);
-            paddle1 = new Paddle(30, 200, 10, PADDLESIZE_X);
-            paddle2 = new Paddle(770, 200, 10, PADDLESIZE_X);
+            paddle1 = new Paddle(30, 200, 10, PADDLESIZE);
+            paddle2 = new Paddle(770, 200, 10, PADDLESIZE);
         }
 
         protected override void OnPaint(PaintEventArgs e)
@@ -112,33 +112,33 @@ namespace Pong
                 ResetGame();
             }
             // if ball hits paddle 1
-            if (ball.X <= paddle1.X && ball.Y <= paddle1.Y + PADDLESIZE_X)
+            if (ball.X <= paddle1.X && ball.Y <= paddle1.Y + PADDLESIZE && ball.Y >= paddle1.Y - PADDLESIZE)
             {
-                ballSpeedX = BALL_SPEED;
-                if (ball.Y > paddle1.Y + PADDLESIZE_X / 2)
-                    ballSpeedY += BALL_SPEED;
-                else if (ball.Y < paddle1.Y + PADDLESIZE_X / 2)
-                    ballSpeedY -= BALL_SPEED;
+                ballSpeedX = BALLSPEED;
+                if (ball.Y > paddle1.Y + PADDLESIZE / 2)
+                    ballSpeedY += BALLSPEED;
+                else if (ball.Y < paddle1.Y + PADDLESIZE / 2)
+                    ballSpeedY -= BALLSPEED;
                 else
                     ballSpeedY = 0;
             }
             // if ball hits paddle 2
-            if (ball.X >= paddle2.X && ball.Y <= paddle2.Y + PADDLESIZE_X)
+            if (ball.X >= paddle2.X && ball.Y <= paddle2.Y + PADDLESIZE && ball.Y >= paddle2.Y - PADDLESIZE)
             {
-                ballSpeedX = -BALL_SPEED;
-                if (ball.Y > paddle2.Y + PADDLESIZE_X / 2)
-                    ballSpeedY = +BALL_SPEED;
-                else if (ball.Y < paddle2.Y + PADDLESIZE_X / 2)
-                    ballSpeedY = -BALL_SPEED;
+                ballSpeedX = -BALLSPEED;
+                if (ball.Y > paddle2.Y + PADDLESIZE / 2)
+                    ballSpeedY = +BALLSPEED;
+                else if (ball.Y < paddle2.Y + PADDLESIZE / 2)
+                    ballSpeedY = -BALLSPEED;
                 else
                     ballSpeedY = 0;
             }
             // if ball hits upper wall
             if (ball.Y <= 0)
-                ballSpeedY = BALL_SPEED;
+                ballSpeedY = BALLSPEED;
             // if ball hits lower wall
             if (ball.Y >= 440)
-                ballSpeedY = -BALL_SPEED;
+                ballSpeedY = -BALLSPEED;
         }
     }
 }
