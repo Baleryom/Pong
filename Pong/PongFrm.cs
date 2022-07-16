@@ -28,9 +28,11 @@ namespace Pong
         int score2 = 0;
         int ballSpeedX = BALLSPEED;
         int ballSpeedY = 0;
+        bool Ai;
 
-        public PongFrm()
+        public PongFrm(bool ai)
         {
+            Ai = ai;
             InitializeComponent();
         }
 
@@ -64,7 +66,15 @@ namespace Pong
         protected override void OnKeyDown(KeyEventArgs e)
         {
             HandleInput(e, ref paddle1, player1);
-            HandleInput(e, ref paddle2, player2);
+            if (Ai)
+            {
+                HandleAiInput(ref paddle2);
+            }
+            else
+            {
+                HandleInput(e, ref paddle2, player2);
+            }
+
             base.OnKeyDown(e);
         }
 
@@ -90,6 +100,12 @@ namespace Pong
                     Refresh();
                 }
             }
+        }
+
+        private void HandleAiInput(ref Paddle paddle)
+        {
+            paddle = new Paddle(paddle.X, ball.Y, paddle.Width, paddle.Height);
+            Refresh();
         }
 
         private void BallDirection(int X, int Y)

@@ -9,7 +9,7 @@
         public MenuFrm()
         {
             InitializeComponent();
-        }       
+        }
 
         protected override void OnPaint(PaintEventArgs e)
         {
@@ -35,10 +35,10 @@
             if (e.KeyValue == (int)Keys.Enter)
             {
                 if (twoPlayerColor == Color.LightGray)
-                {
-                    this.Hide();
-                    new PongFrm().Show();
-                }
+                    new PongFrm(false).Show();
+                else if (onePlayerColor == Color.LightGray)
+                    new PongFrm(true).Show();
+                this.Hide();
             }
             base.OnKeyDown(e);
         }
