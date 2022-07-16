@@ -19,9 +19,9 @@ namespace Pong
         const int PADDLESIZE = 100;
         const int BALLSPEED = 2;
         DrawableObject background = new DrawableObject(0, 0, 1000, 1000);
-        Paddle paddle1 = new Paddle(30, 200, 10, PADDLESIZE);
-        Paddle paddle2 = new Paddle(770, 200, 10, PADDLESIZE);
-        Ball ball = new Ball(400, 200, 15, 15);
+        DrawableObject paddle1 = new DrawableObject(30, 200, 10, PADDLESIZE);
+        DrawableObject paddle2 = new DrawableObject(770, 200, 10, PADDLESIZE);
+        DrawableObject ball = new DrawableObject(400, 200, 15, 15);
         PlayerInput player2 = new PlayerInput((int)Keys.Up, (int)Keys.Down);
         PlayerInput player1 = new PlayerInput((int)Keys.W, (int)Keys.S);
         int score1 = 0;
@@ -47,9 +47,9 @@ namespace Pong
 
         private void ResetGame()
         {
-            ball = new Ball(400, 200, 15, 15);
-            paddle1 = new Paddle(30, 200, 10, PADDLESIZE);
-            paddle2 = new Paddle(770, 200, 10, PADDLESIZE);
+            ball = new DrawableObject(400, 200, 15, 15);
+            paddle1 = new DrawableObject(30, 200, 10, PADDLESIZE);
+            paddle2 = new DrawableObject(770, 200, 10, PADDLESIZE);
         }
 
         protected override void OnPaint(PaintEventArgs e)
@@ -78,14 +78,14 @@ namespace Pong
             base.OnKeyDown(e);
         }
 
-        private void HandleInput(KeyEventArgs e, ref Paddle paddle, PlayerInput input)
+        private void HandleInput(KeyEventArgs e, ref DrawableObject paddle, PlayerInput input)
         {
             if (e.KeyValue == input.InputDown)
             {
                 if (paddle.Y < 370)
                 {
                     Debug.Write($"Key Down\n {paddle.X},{paddle.Y}");
-                    paddle = new Paddle(paddle.X, paddle.Y + 30, paddle.Width, paddle.Height);
+                    paddle = new DrawableObject(paddle.X, paddle.Y + 30, paddle.Width, paddle.Height);
                     // Async call
                     Refresh();
                 }
@@ -95,22 +95,22 @@ namespace Pong
                 if (paddle.Y > 15)
                 {
                     Debug.Write($"Key Down\n {paddle.X},{paddle.Y}");
-                    paddle = new Paddle(paddle.X, paddle.Y - 30, paddle.Width, paddle.Height);
+                    paddle = new DrawableObject(paddle.X, paddle.Y - 30, paddle.Width, paddle.Height);
                     // Async call
                     Refresh();
                 }
             }
         }
 
-        private void HandleAiInput(ref Paddle paddle)
+        private void HandleAiInput(ref DrawableObject paddle)
         {
-            paddle = new Paddle(paddle.X, ball.Y, paddle.Width, paddle.Height);
+            paddle = new DrawableObject(paddle.X, ball.Y, paddle.Width, paddle.Height);
             Refresh();
         }
 
         private void BallDirection(int X, int Y)
         {
-            ball = new Ball(ball.X + X, ball.Y + Y, 15, 15);
+            ball = new DrawableObject(ball.X + X, ball.Y + Y, 15, 15);
         }
 
         private void HandlePhysics()
