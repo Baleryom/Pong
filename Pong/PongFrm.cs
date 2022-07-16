@@ -19,8 +19,8 @@ namespace Pong
         const int PADDLESIZE_X = 100;
         const int BALL_SPEED = 2;
         DrawableObject background = new DrawableObject(0, 0, 1000, 1000);
-        Paddle paddle1 = new Paddle(10, 200, 10, PADDLESIZE_X);
-        Paddle paddle2 = new Paddle(780, 200, 10, PADDLESIZE_X);
+        Paddle paddle1 = new Paddle(30, 200, 10, PADDLESIZE_X);
+        Paddle paddle2 = new Paddle(770, 200, 10, PADDLESIZE_X);
         Ball ball = new Ball(400, 200, 15, 15);
         PlayerInput player2 = new PlayerInput((int)Keys.Up, (int)Keys.Down);
         PlayerInput player1 = new PlayerInput((int)Keys.W, (int)Keys.S);
@@ -46,8 +46,8 @@ namespace Pong
         private void ResetGame()
         {
             ball = new Ball(400, 200, 15, 15);
-            paddle1 = new Paddle(10, 200, 10, PADDLESIZE_X);
-            paddle2 = new Paddle(780, 200, 10, PADDLESIZE_X);
+            paddle1 = new Paddle(30, 200, 10, PADDLESIZE_X);
+            paddle2 = new Paddle(770, 200, 10, PADDLESIZE_X);
         }
 
         protected override void OnPaint(PaintEventArgs e)
@@ -100,13 +100,13 @@ namespace Pong
         private void HandlePhysics()
         {
             // if player 1 scores
-            if (ball.X >= 800)
+            if (ball.X >= 782)
             {
                 score1++;
                 ResetGame();
             }
             // if player 2 scores
-            if (ball.X <= 5)
+            if (ball.X <= 10)
             {
                 score2++;
                 ResetGame();
@@ -115,9 +115,9 @@ namespace Pong
             if (ball.X <= paddle1.X && ball.Y <= paddle1.Y + PADDLESIZE_X)
             {
                 ballSpeedX = BALL_SPEED;
-                if (ball.Y > paddle1.Y + 35)
+                if (ball.Y > paddle1.Y + PADDLESIZE_X / 2)
                     ballSpeedY += BALL_SPEED;
-                else if (ball.Y < paddle1.Y + 35)
+                else if (ball.Y < paddle1.Y + PADDLESIZE_X / 2)
                     ballSpeedY -= BALL_SPEED;
                 else
                     ballSpeedY = 0;
