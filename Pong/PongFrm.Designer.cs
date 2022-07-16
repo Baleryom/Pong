@@ -37,8 +37,8 @@
 
             // Every quarter of a second, run the function GameLoop
             _timer = new System.Threading.Timer(GameLoop, null,
-              TimeSpan.FromSeconds(0.03),
-              TimeSpan.FromSeconds(0.03));
+              TimeSpan.FromSeconds(0.01),
+              TimeSpan.FromSeconds(0.01));
         }
 
         #endregion

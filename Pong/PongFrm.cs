@@ -16,16 +16,17 @@ namespace Pong
 
     public partial class PongFrm : MenuFrm
     {
-        const int PADDLESIZE_X = 150;
+        const int PADDLESIZE_X = 100;
+        const int BALL_SPEED = 2;
         DrawableObject background = new DrawableObject(0, 0, 1000, 1000);
         Paddle paddle1 = new Paddle(10, 200, 10, PADDLESIZE_X);
-        Paddle paddle2 = new Paddle(790, 200, 10, PADDLESIZE_X);
+        Paddle paddle2 = new Paddle(780, 200, 10, PADDLESIZE_X);
         Ball ball = new Ball(400, 200, 15, 15);
         PlayerInput player2 = new PlayerInput((int)Keys.Up, (int)Keys.Down);
         PlayerInput player1 = new PlayerInput((int)Keys.W, (int)Keys.S);
         int score1 = 0;
         int score2 = 0;
-        int ballSpeedX = 15;
+        int ballSpeedX = BALL_SPEED;
         int ballSpeedY = 0;
 
         public PongFrm()
@@ -46,18 +47,18 @@ namespace Pong
         {
             ball = new Ball(400, 200, 15, 15);
             paddle1 = new Paddle(10, 200, 10, PADDLESIZE_X);
-            paddle2 = new Paddle(790, 200, 10, PADDLESIZE_X);
+            paddle2 = new Paddle(780, 200, 10, PADDLESIZE_X);
         }
 
         protected override void OnPaint(PaintEventArgs e)
         {
             Graphics g = e.Graphics;
-            Draw(g, background.Rect, GetBrushColor(Color.Black));
-            Draw(g, paddle1.Rect, GetBrushColor(Color.Blue));
-            Draw(g, paddle2.Rect, GetBrushColor(Color.Pink));
-            BallDirectionX(ballSpeedX, ballSpeedY);
-            Draw(g, ball.Rect, GetBrushColor(Color.White));
-            g.DrawString(score1.ToString() + ":" + score2.ToString(), new Font("Times New Roman", 25.0f), GetBrushColor(Color.Gray), new PointF(350f, 30f));
+            background.Draw(g, background.Rect, Color.Black);
+            paddle1.Draw(g, paddle1.Rect, Color.Blue);
+            paddle2.Draw(g, paddle2.Rect, Color.Pink);
+            BallDirection(ballSpeedX, ballSpeedY);
+            ball.Draw(g, ball.Rect, Color.White);
+            g.DrawString(score1.ToString() + ":" + score2.ToString(), new Font("Times New Roman", 25.0f), background.GetBrushColor(Color.Gray), new PointF(350f, 30f));
         }
 
         protected override void OnKeyDown(KeyEventArgs e)
@@ -71,7 +72,7 @@ namespace Pong
         {
             if (e.KeyValue == input.InputDown)
             {
-                if (paddle.Y < 410)
+                if (paddle.Y < 370)
                 {
                     Debug.Write($"Key Down\n {paddle.X},{paddle.Y}");
                     paddle = new Paddle(paddle.X, paddle.Y + 30, paddle.Width, paddle.Height);
@@ -81,7 +82,7 @@ namespace Pong
             }
             if (e.KeyValue == input.InputUp)
             {
-                if (paddle.Y > 5)
+                if (paddle.Y > 15)
                 {
                     Debug.Write($"Key Down\n {paddle.X},{paddle.Y}");
                     paddle = new Paddle(paddle.X, paddle.Y - 30, paddle.Width, paddle.Height);
@@ -91,53 +92,53 @@ namespace Pong
             }
         }
 
-        private void BallDirectionX(int X, int Y)
+        private void BallDirection(int X, int Y)
         {
             ball = new Ball(ball.X + X, ball.Y + Y, 15, 15);
         }
 
         private void HandlePhysics()
         {
-            // if ball hits paddle 1
-            if (ball.X == paddle1.X && ball.Y <= paddle1.Y + PADDLESIZE_X)
-            {
-                ballSpeedX = 15;
-                if (ball.Y > paddle1.Y + 35)
-                    ballSpeedY += 15;
-                else if (ball.Y < paddle1.Y + 35)
-                    ballSpeedY -= 15;
-                else
-                    ballSpeedY = 0;
-            }
-            // if ball hits paddle 2
-            if (ball.X == paddle2.X && ball.Y <= paddle2.Y + PADDLESIZE_X)
-            {
-                ballSpeedX = -15;
-                if (ball.Y > paddle2.Y + PADDLESIZE_X / 2)
-                    ballSpeedY = +15;
-                else if (ball.Y < paddle2.Y + PADDLESIZE_X / 2)
-                    ballSpeedY = -15;
-                else
-                    ballSpeedY = 0;
-            }
-            // if ball hits upper wall
-            if (ball.Y <= 0)
-                ballSpeedY = 30;
-            // if ball hits lower wall
-            if (ball.Y >= 440)
-                ballSpeedY = -30;
             // if player 1 scores
-            if (ball.X > 800)
+            if (ball.X >= 800)
             {
                 score1++;
                 ResetGame();
             }
             // if player 2 scores
-            if (ball.X < 2)
+            if (ball.X <= 5)
             {
                 score2++;
                 ResetGame();
             }
+            // if ball hits paddle 1
+            if (ball.X <= paddle1.X && ball.Y <= paddle1.Y + PADDLESIZE_X)
+            {
+                ballSpeedX = BALL_SPEED;
+                if (ball.Y > paddle1.Y + 35)
+                    ballSpeedY += BALL_SPEED;
+                else if (ball.Y < paddle1.Y + 35)
+                    ballSpeedY -= BALL_SPEED;
+                else
+                    ballSpeedY = 0;
+            }
+            // if ball hits paddle 2
+            if (ball.X >= paddle2.X && ball.Y <= paddle2.Y + PADDLESIZE_X)
+            {
+                ballSpeedX = -BALL_SPEED;
+                if (ball.Y > paddle2.Y + PADDLESIZE_X / 2)
+                    ballSpeedY = +BALL_SPEED;
+                else if (ball.Y < paddle2.Y + PADDLESIZE_X / 2)
+                    ballSpeedY = -BALL_SPEED;
+                else
+                    ballSpeedY = 0;
+            }
+            // if ball hits upper wall
+            if (ball.Y <= 0)
+                ballSpeedY = BALL_SPEED;
+            // if ball hits lower wall
+            if (ball.Y >= 440)
+                ballSpeedY = -BALL_SPEED;
         }
     }
 }

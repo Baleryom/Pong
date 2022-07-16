@@ -19,5 +19,15 @@
             get { return new Rectangle(X, Y, Width, Height); }
             set { Rect = value; }
         }
+
+        public void Draw(Graphics g, Rectangle rect, Color color)
+        {
+            g.FillRectangle(GetBrushColor(color), rect);
+        }
+
+        public SolidBrush GetBrushColor(Color color)
+        {
+            return new SolidBrush(color);
+        }
     }
 }

@@ -25,10 +25,10 @@
         protected override void OnPaint(PaintEventArgs e)
         {
             Graphics g = e.Graphics;
-            Draw(g, background.Rect, GetBrushColor(Color.Black));
-            g.DrawString("Pong", new Font("Times New Roman", 25.0f), GetBrushColor(Color.Gray), new PointF(350f, 50f));
-            g.DrawString("  1P  ", new Font("Times New Roman", 25.0f), GetBrushColor(onePlayerColor), new PointF(350f, 100f));
-            g.DrawString("  2P  ", new Font("Times New Roman", 25.0f), GetBrushColor(twoPlayerColor), new PointF(350f, 150f));
+            background.Draw(g, background.Rect, Color.Black);
+            g.DrawString("Pong", new Font("Times New Roman", 25.0f), background.GetBrushColor(Color.Gray), new PointF(350f, 50f));
+            g.DrawString("  1P  ", new Font("Times New Roman", 25.0f), background.GetBrushColor(onePlayerColor), new PointF(350f, 100f));
+            g.DrawString("  2P  ", new Font("Times New Roman", 25.0f), background.GetBrushColor(twoPlayerColor), new PointF(350f, 150f));
         }
 
         protected override void OnKeyDown(KeyEventArgs e)
@@ -52,16 +52,6 @@
                 }
             }
             base.OnKeyDown(e);
-        }
-
-        protected static void Draw(Graphics g, Rectangle rect, Brush brush)
-        {
-            g.FillRectangle(brush, rect);
-        }
-
-        protected static SolidBrush GetBrushColor(Color color)
-        {
-            return new SolidBrush(color);
         }
 
         private void SwapColors(ref Color colorA, ref Color colorB)
